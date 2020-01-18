@@ -1,0 +1,4 @@
+{
+    "jwtPrivateKey": "devdirsalt",
+    "db": "mongodb://localhost:27017/devdir_test"
+}
