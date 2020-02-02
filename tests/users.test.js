@@ -1,20 +1,47 @@
 const request = require('supertest');
 const { User } = require("../models/user");
+const jwt = require('jsonwebtoken');
+
 let server;
 
-describe(":POST /api/users/register", () => {
+describe('/api/users', () => {
 
-    let newUser;
+    let newUser, token, url, params;
 
-    const exec = () => {
+    const post_exec = () => {
         return request(server)
-            .post('/api/users/register')
+            .post(url)
+            .set("x-auth-token", token)
             .send(newUser);
     }
+
+    const get_exec = () => {
+        return request(server)
+            .get(url)
+            .set("x-auth-token", token);
+    }
+
+    const put_exec = () => {
+        return request(server)
+            .put(url)
+            .set("x-auth-token", token)
+            .send(params);
+    }
+
+    const dummyUser = async() => {
+
+        const user = new User(newUser2);
+        await user.save();
+
+        token = jwt.sign(newUser2, process.env.jwtprivatekey);
+    };
 
     beforeEach(() => {
 
         newUser = { "name": "Christian Uche", "email": "test@email.com", "password": "1234565" };
+        newUser2 = { "name": "Christian Uche", "email": "nwachukwu1116@gmail.com", "password": "1234565" };
+        params = { "email": "nwachukwu1116@gmail.com", "password": "1234565" };
+        token = jwt.sign(newUser, process.env.jwtprivatekey);
         server = require("../app");
 
     });
@@ -24,39 +51,130 @@ describe(":POST /api/users/register", () => {
         await User.deleteMany({})
     });
 
+    describe(":POST /register", () => {
 
-    it('should return 400 if any of the required input for user creation is missing', async() => {
+        it('should return 400 if any of the required input for user creation is missing', async() => {
+            newUser = {};
+            url = '/api/users/register';
+            const res = await post_exec();
+            expect(res.status).toBe(400);
+        });
 
-        newUser = {};
-        const res = await exec();
+        it('should return 400 if a user already exist', async() => {
 
-        expect(res.status).toBe(400);
+            const user = new User(newUser);
+            url = '/api/users/register';
+            await user.save();
+
+            const res = await post_exec();
+            expect(res.status).toBe(400);
+        });
+
+        it('should return 201 if a valid input request is sent and user was created.', async() => {
+            url = '/api/users/register';
+            const res = await post_exec();
+            expect(res.status).toBe(201);
+        });
+
+        it('should return a valid user object if user was successfully created.', async() => {
+            url = '/api/users/register';
+            const res = await post_exec();
+            expect(res.body).toHaveProperty('_id');
+        });
     });
 
-    it('should return 400 if a user already exist', async() => {
 
-        const user = new User(newUser);
-        await user.save();
+    describe(":POST  /verify/:token/account", () => {
 
-        const res = await exec();
-        expect(res.status).toBe(400);
+        it('should return 400 if no valid token was included in the url', async() => {
+            await dummyUser();
+            token = "12345";
+            url = `/api/users/verify/${token}/account`;
+
+            const res = await get_exec();
+
+            expect(res.status).toBe(401)
+        });
+
+
+        it('should return 401 if a user is already verified', async() => {
+
+            newUser2.verified = true;
+
+            await dummyUser();
+
+            url = `/api/users/verify/${token}/account`;
+
+            const res = await get_exec();
+            expect(res.status).toBe(401)
+        });
+
+
+        it('should return 200 if a user is was successfully verified', async() => {
+
+            await dummyUser();
+
+            url = `/api/users/verify/${token}/account`;
+
+            const res = await get_exec();
+            expect(res.status).toBe(200)
+        });
+
     });
 
-    it('should return 201 if a valid input request is sent and user was created.', async() => {
-        const res = await exec();
-        expect(res.status).toBe(201);
+    describe(":PUT  /token/regenerate/", () => {
+
+        it('should return 401 if a user could not login', async() => {
+            await dummyUser();
+
+            url = `/api/users/token/regenerate/`;
+            params = { "email": "wrong@email.com", "password": "badpassword" };
+
+            const res = await put_exec();
+
+            expect(res.status).toBe(401)
+        });
+
+        it('should return 200 if a token was successfully generated.', async() => {
+            await dummyUser();
+
+            url = `/api/users/token/regenerate/`;
+
+            const res = await put_exec();
+
+            expect(res.status).toBe(200)
+            expect(res.header).toHaveProperty("x-auth-token")
+
+        });
+
     });
 
-    it('should return a valid user object if user was successfully created.', async() => {
-        const res = await exec();
-        expect(res.body).toHaveProperty('_id');
+
+    describe(":PUT  /change/password/", () => {
+
+        it('should return 401 if a user did not provide a token', async() => {
+            await dummyUser();
+
+            url = `/api/users/change/password/`;
+            params = { "password": "badpassword", "confirm_password": "heaven111" };
+            token = "";
+            const res = await put_exec();
+
+            expect(res.status).toBe(401)
+        });
+
+        it('should return 200 if a password was successfully updated', async() => {
+            await dummyUser();
+
+            url = `/api/users/change/password/`;
+            params = { "password": "1234565", "confirm_password": "1234565" };
+            const res = await put_exec();
+
+            expect(res.status).toBe(200)
+
+        });
+
     });
 
-    it('should return a valid jwt token in the header if a user was successfully created.', async() => {
-        const res = await exec();
 
-        console.log(res.header);
-
-        expect(res.header).toHaveProperty('x-auth-token');
-    });
 });

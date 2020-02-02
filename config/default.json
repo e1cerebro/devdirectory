@@ -1,4 +1,4 @@
 {
-    "jwtPrivateKey": "devdirsalt",
-    "db": "mongodb://localhost:27017/devdir"
+    "db": "mongodb://localhost:27017/devdir",
+    "url": "http://localhost:8000"
 }
