@@ -47,8 +47,8 @@ describe('/api/users', () => {
     });
 
     afterEach(async() => {
+        await User.deleteMany({});
         await server.close();
-        await User.deleteMany({})
     });
 
     describe(":POST /register", () => {
@@ -136,6 +136,8 @@ describe('/api/users', () => {
         });
 
         it('should return 200 if a token was successfully generated.', async() => {
+
+            newUser2.verified = true;
             await dummyUser();
 
             url = `/api/users/token/regenerate/`;
@@ -164,6 +166,7 @@ describe('/api/users', () => {
         });
 
         it('should return 200 if a password was successfully updated', async() => {
+            newUser2.verified = true;
             await dummyUser();
 
             url = `/api/users/change/password/`;

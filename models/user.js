@@ -116,7 +116,7 @@ userSchema.pre('save', async function(next) {
 
 userSchema.post('save', async function(newUser, next) {
     var user = this;
-    await userReg(newUser).catch(console.error)
+    //  await userReg(newUser).catch(console.error)
     next();
 });
 

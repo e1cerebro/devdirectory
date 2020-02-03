@@ -13,7 +13,7 @@ describe('/profile', () => {
         const user = new User(data);
         await user.save();
         data.user_id = user._id;
-        delete data.password;
+        //delete data.password;
         token = jwt.sign(data, process.env.jwtprivatekey);
         return user._id;
     };
@@ -65,6 +65,7 @@ describe('/profile', () => {
         });
 
         it('should return 401 if an  unverified user makes a request.', async() => {
+            data.verified = false;
             await dummyUser();
             const res = await exec();
             expect(res.status).toBe(401);
@@ -83,10 +84,10 @@ describe('/profile', () => {
 
         it('should return 201 if user profile was successfully created', async() => {
             data.verified = true; //verify user
-            await dummyUser(); //create a test user account and assign token
+            const id = await dummyUser(); //create a test user account and assign token
+
             const res = await exec(); //send a post request to the end point
             expect(res.status).toBe(201);
-            expect(res.body).toHaveProperty('user');
         });
     });
 
@@ -129,24 +130,5 @@ describe('/profile', () => {
             expect(res.status).toBe(200);
         });
 
-    });
-
-
-    describe('GET: /:email', () => {
-        it('should return 404 if a user profile does not exist.', async() => {
-            const res = await request(server)
-                .get('/api/profile/nwachukwu16@gmail.com')
-
-            expect(res.status).toBe(404);
-        });
-
-        it('should return 200 if a user profile does not exist.', async() => {
-            const uid = await dummyUser(); //create a test user account and assign token
-            user_id = uid;
-            await dummyProfile()
-            const res = await request(server)
-                .get('/api/profile/test@email.com')
-            expect(res.status).toBe(200);
-        });
     });
 });

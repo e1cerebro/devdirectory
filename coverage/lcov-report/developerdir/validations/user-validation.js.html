@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/15</span>
+                <span class='fraction'>12/15</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>3/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/15</span>
+                <span class='fraction'>12/15</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -110,31 +110,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -159,32 +159,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const Joi = require('@hapi/joi');
 &nbsp;
 &nbsp;
-const validateUserReg = <span class="fstat-no" title="function not covered" >(r</span>equest) =&gt; {
-    const schema = <span class="cstat-no" title="statement not covered" >Joi.object({</span>
+const validateUserReg = (request) =&gt; {
+    const schema = Joi.object({
         name: Joi.string().required().min(5).max(255),
         email: Joi.string().required().regex(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/),
         password: Joi.string().required().min(5).max(255),
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return schema.validate(request);</span>
+    return schema.validate(request);
 }
 &nbsp;
-const validateUserLogin = <span class="fstat-no" title="function not covered" >(r</span>equest) =&gt; {
-    const schema = <span class="cstat-no" title="statement not covered" >Joi.object({</span>
+const validateUserLogin = (request) =&gt; {
+    const schema = Joi.object({
         email: Joi.string().required().regex(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/),
         password: Joi.required(),
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return schema.validate(request);</span>
+    return schema.validate(request);
 }
 &nbsp;
-const passwordChange = <span class="fstat-no" title="function not covered" >(r</span>equest) =&gt; {
-    const schema = <span class="cstat-no" title="statement not covered" >Joi.object({</span>
+const passwordChange = (request) =&gt; {
+    const schema = Joi.object({
         password: Joi.string().required().pattern(/^[a-zA-Z0-9]{3,30}$/),
         confirm_password: Joi.any().valid(Joi.ref('password')).required().error(<span class="fstat-no" title="function not covered" >(e</span>rrors) =&gt; <span class="cstat-no" title="statement not covered" >errors)</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return schema.validate(request);</span>
+    return schema.validate(request);
 }
 &nbsp;
 const validateBio = <span class="fstat-no" title="function not covered" >(r</span>equest) =&gt; {
@@ -213,7 +213,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Feb 02 2020 13:35:07 GMT-0500 (Eastern Standard Time)
+                at Sun Feb 02 2020 15:17:18 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="..\..\prettify.js"></script>

@@ -13,8 +13,12 @@ const generateToken = (user) => {
 }
 
 const verifyToken = (token) => {
-    decoded = jwt.verify(token, process.env.jwtprivatekey);
-    return decoded;
+    try {
+        decoded = jwt.verify(token, process.env.jwtprivatekey);
+        return decoded;
+    } catch (error) {
+        return false;
+    }
 }
 
 module.exports = {

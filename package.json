@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "node ./bin/www",
-        "test": "jest --watchAll  --verbose --coverage"
+        "test": "jest --watchAll  --verbose"
     },
     "dependencies": {
         "@hapi/joi": "^17.0.2",
